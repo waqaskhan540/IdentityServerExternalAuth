@@ -88,3 +88,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.cache
+.vs/config/applicationhost.config
+*.suo
+.vs/IdentityServerExternalAuth/v15/sqlite3/storage.ide
