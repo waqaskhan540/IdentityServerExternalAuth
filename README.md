@@ -1,8 +1,8 @@
-### External Authentication with IdentityServer4
-> Exchange Facebook,Google and Twitter access token for an IdentityServer4 access token using ResourceOwner flow.
+# Exchanging external Tokens (Google, Twitter, Facebook) with IdentityServer access tokens using an extension grant
 
 #### How to exchange external tokens for IdentityServer access token ?
-Make the following request to IdentityServer's **connect/token** endpoint.
+* Request authentication using the provider's native libary.
+* Exchange external token with IdentityServer token.
 
 You can change **Provider** to **Facebook , Google and Twitter**
 
