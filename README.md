@@ -1,20 +1,133 @@
-### External Authentication with IdentityServer4
-> Exchange Facebook,Google and Twitter access token for an IdentityServer4 access token using ResourceOwner flow.
+# Exchanging external Tokens (Google, Twitter, Facebook) with IdentityServer access tokens using an extension grant
 
 #### How to exchange external tokens for IdentityServer access token ?
-Make the following request to IdentityServer's **connect/token** endpoint.
+* Request authentication using the provider's native libary.
+* Exchange external token with IdentityServer token by making following request to IdentityServer.
 
-You can change **Provider** to **Facebook , Google and Twitter**
-
-If the user's email is not retrieved from the provider, identity server returns the user object associated with the access token from the given 
-provider.
-
-
-![Alt text](https://github.com/waqaskhan540/IdentityServerExternalAuth/blob/master/screenshots/id1.PNG?raw=true "")
-
-Make another request to **connect/token** , this time with an extra **email** parameter.
-
-![Alt text](https://github.com/waqaskhan540/IdentityServerExternalAuth/blob/master/screenshots/id2.PNG?raw=true "")
-
+```
+POST connect/token
+     
+     client_id = [your_client_id]
+     client_secret = [your_client_secret]
+     scopes = [your_scopes]
+     grant_type = external
+     provider = facebook 
+     external_token  = [facebook_access_token]
+```
 
 
+You can change ```provider``` to ```Facebook``` , ```Google``` and ```Twitter``` and provide respective token in the ```external_token``` parameter.
+
+#### How to setup an external provider
+
+1. ##### Derive an interface from ```IExternalAuthProvider```
+
+```csharp
+
+public interface IMyCustomProvider : IExternalProvider {
+    Provider provider {get;}
+}
+```
+2. ##### Add your provider to ```ProviderType``` enum
+
+```csharp
+public enum ProviderType {
+  
+  Facebook,
+  Twitter,
+  Google,
+  MyCustomProvider
+}
+```
+3. ##### Add provider info to ```ProviderDataSource```
+
+```csharp
+
+ public class ProviderDataSource
+    {
+        public static IEnumerable<Provider> GetProviders()
+        {
+            return new List<Provider>
+            {
+                new Provider
+                {
+                    ProviderId = 1,
+                    Name = "Facebook",
+                    UserInfoEndPoint = "https://graph.facebook.com/v2.8/me"
+                },
+                new Provider
+                {
+                    ProviderId = 2,
+                    Name = "Google",
+                    UserInfoEndPoint = "https://www.googleapis.com/oauth2/v2/userinfo"
+                },
+                 new Provider
+                {
+                    ProviderId = 3,
+                    Name = "Twitter",
+                    UserInfoEndPoint = "https://api.twitter.com/1.1/account/verify_credentials.json"
+                },
+                new Provider 
+                {
+                    ProviderId = 4,
+                    Name="MyCustomProvider",
+                    UserInfoEndPoint = "[url to end point which validates the token and returns user data]"
+                }
+            };
+        }
+    }
+
+```
+
+4. ##### Provide an implementation for ```IMyCustomProvider```
+
+```csharp
+public class MyCustomProvider : IMyCustomProvider {
+
+private readonly HttpClient _httpClient;
+public MyCustomProvider(HttpClient httpClient) {
+  _httpClient = httpClient;
+}
+
+public Provider =>_providerRepository.Get()
+                                    .FirstOrDefault(x => x.Name.ToLower() == ProviderType.MyCustomProvider.ToString().ToLower());
+                                    
+public JObject GetUserInfo(string accessToken) {
+
+ var query = "[build your request according to your providers configuration]";
+ 
+ var result = _httpClient.GetAsync(Provider.UserInfoEndPoint + query).Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var infoObject = JObject.Parse(result.Content.ReadAsStringAsync().Result);
+                return infoObject;
+            }
+            return null;
+
+}
+}
+```
+5. ##### Bind ```IMyCustomProvider``` in ```ServiceCollectionExtensions```
+
+```csharp
+ public static IServiceCollection AddProviders(this IServiceCollection services)
+        {
+            services.AddTransient<IFacebookAuthProvider, FacebookAuthProvider>();
+            services.AddTransient<ITwitterAuthProvider, TwitterAuthProvider>();
+            services.AddTransient<IGoogleAuthProvider, GoogleAuthProvider>();
+            services.AddTransient<IMyCustomProvider,MyCustomProvider>();
+            return services;
+        }
+```
+6. ##### Make a request to IdentityServer using new provider
+
+```
+POST connect/token
+     
+     client_id = [your_client_id]
+     client_secret = [your_client_secret]
+     scopes = [your_scopes]
+     grant_type = external
+     provider = mycustomprovider 
+     external_token  = [access_token_from_custom_provider]
+```
