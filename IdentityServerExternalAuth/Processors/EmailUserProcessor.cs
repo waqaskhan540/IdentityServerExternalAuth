@@ -36,6 +36,13 @@ namespace IdentityServerExternalAuth.Processors
                 return new GrantValidationResult(TokenRequestErrors.InvalidRequest, "could not retrieve user Id from the token provided");
             }
 
+            var existingUser = _userManager.FindByEmailAsync(userEmail).Result;
+            if(existingUser != null)
+            {
+                return new GrantValidationResult(TokenRequestErrors.InvalidRequest, "User with specified email already exists");
+
+            }
+
             var new_user = new ApplicationUser { Email = userEmail ,UserName = userEmail};
             var result =  _userManager.CreateAsync(new_user).Result;
             if (result.Succeeded)

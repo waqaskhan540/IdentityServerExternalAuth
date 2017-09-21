@@ -48,6 +48,7 @@ namespace IdentityServerExternalAuth.Configuration
                         new Secret("secret".Sha256())
                     },
                     AllowedScopes = {
+                        "Test.WebApi",
                         StandardScopes.Email,
                         StandardScopes.OpenId,
                         StandardScopes.Profile
