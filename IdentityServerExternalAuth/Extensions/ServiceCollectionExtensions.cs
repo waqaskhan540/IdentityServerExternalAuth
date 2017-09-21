@@ -46,6 +46,8 @@ namespace IdentityServerExternalAuth.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<INonEmailUserProcessor, NonEmailUserProcessor>();
+            services.AddScoped<IEmailUserProcessor, EmailUserProcessor>();
             services.AddScoped<IExtensionGrantValidator, ExternalAuthenticationGrant>();
             services.AddSingleton<HttpClient>();
             return services;
@@ -53,8 +55,7 @@ namespace IdentityServerExternalAuth.Extensions
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<INonEmailUserProcessor, NonEmailUserProcessor>();
-            services.AddScoped<IEmailUserProcessor, EmailUserProcessor>();
+          
             services.AddScoped<IExternalUserRepository, ExternalUserRepository>();
             services.AddScoped<IProviderRepository, ProviderRepository>();
             return services;
@@ -65,6 +66,7 @@ namespace IdentityServerExternalAuth.Extensions
             services.AddTransient<IFacebookAuthProvider, FacebookAuthProvider>();
             services.AddTransient<ITwitterAuthProvider, TwitterAuthProvider>();
             services.AddTransient<IGoogleAuthProvider, GoogleAuthProvider>();
+            services.AddTransient<ILinkedInAuthProvider, LinkedInAuthProvider>();
             return services;
         }
     }

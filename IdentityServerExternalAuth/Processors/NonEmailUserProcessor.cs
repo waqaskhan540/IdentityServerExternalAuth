@@ -28,6 +28,10 @@ namespace IdentityServerExternalAuth.Processors
         {
 
             var userEmail = userInfo.Value<string>("email");
+
+            if (provider.ToLower() == "linkedin")
+                userEmail = userInfo.Value<string>("emailAddress");
+
             var userExternalId = userInfo.Value<string>("id");
 
             if (userEmail == null)
@@ -52,7 +56,7 @@ namespace IdentityServerExternalAuth.Processors
             }
             else
             {
-                var new_user = new ApplicationUser { Email = userEmail };
+                var new_user = new ApplicationUser { Email = userEmail,UserName = userEmail };
                 var result =  _userManager.CreateAsync(new_user).Result;
                 if (result.Succeeded)
                 {

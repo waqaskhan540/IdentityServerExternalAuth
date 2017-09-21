@@ -21,6 +21,7 @@ namespace IdentityServerExternalAuth.ExtensionGrant
         private readonly IFacebookAuthProvider _facebookAuthProvider;
         private readonly IGoogleAuthProvider _googleAuthProvider;
         private readonly ITwitterAuthProvider _twitterAuthProvider;
+        private readonly ILinkedInAuthProvider _linkedAuthProvider;
         private readonly INonEmailUserProcessor _nonEmailUserProcessor;
         private readonly IEmailUserProcessor _emailUserProcessor;
         public ExternalAuthenticationGrant(
@@ -30,8 +31,9 @@ namespace IdentityServerExternalAuth.ExtensionGrant
             IFacebookAuthProvider facebookAuthProvider,
             IGoogleAuthProvider googleAuthProvider,
             ITwitterAuthProvider twitterAuthProvider,
+            ILinkedInAuthProvider linkeInAuthProvider,
             INonEmailUserProcessor nonEmailUserProcessor,
-            IEmailUserProcessor emailUserProcessor
+            IEmailUserProcessor emailUserProcessor            
             )
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -40,6 +42,7 @@ namespace IdentityServerExternalAuth.ExtensionGrant
             _facebookAuthProvider = facebookAuthProvider ?? throw new ArgumentNullException(nameof(facebookAuthProvider));
             _googleAuthProvider = googleAuthProvider ?? throw new ArgumentNullException(nameof(googleAuthProvider));
             _twitterAuthProvider = twitterAuthProvider ?? throw new ArgumentNullException(nameof(twitterAuthProvider));
+            _linkedAuthProvider = linkeInAuthProvider ?? throw new ArgumentNullException(nameof(linkeInAuthProvider));
             _nonEmailUserProcessor = nonEmailUserProcessor ?? throw new ArgumentNullException(nameof(nonEmailUserProcessor));
             _emailUserProcessor = emailUserProcessor ?? throw new ArgumentNullException(nameof(nonEmailUserProcessor));
 
@@ -47,6 +50,7 @@ namespace IdentityServerExternalAuth.ExtensionGrant
             providers.Add(ProviderType.Facebook, _facebookAuthProvider);
             providers.Add(ProviderType.Google, _googleAuthProvider);
             providers.Add(ProviderType.Twitter, _twitterAuthProvider);
+            providers.Add(ProviderType.LinkedIn, _linkedAuthProvider);
         }
 
 

@@ -9,6 +9,7 @@ namespace IdentityServerExternalAuth.Helpers
     {
         Facebook,
         Twitter,
-        Google
+        Google,
+        LinkedIn
     }
 }
