@@ -131,7 +131,17 @@ public JObject GetUserInfo(string accessToken) {
             return services;
         }
 ```
-6. ##### Make a request to IdentityServer using new provider
+
+6. ##### Add ```MyCustomProvider``` to ```ExternalAuthenticationGrant```
+```csharp
+  providers = new Dictionary<ProviderType, IExternalAuthProvider>();
+            providers.Add(ProviderType.Facebook, _facebookAuthProvider);
+            providers.Add(ProviderType.Google, _googleAuthProvider);
+            providers.Add(ProviderType.Twitter, _twitterAuthProvider);
+            providers.Add(ProviderType.LinkedIn, _linkedAuthProvider);
+            providers.Add(ProviderType.MyCustomProvider, _myCustomProvider);
+```
+7. ##### Make a request to IdentityServer using new provider
 
 ```
 POST connect/token
