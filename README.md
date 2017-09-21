@@ -1,6 +1,6 @@
 # Exchanging external Tokens (Google, Twitter, Facebook) with IdentityServer access tokens using an extension grant
 
-#### How to exchange external tokens for IdentityServer access token ?
+## How to exchange external tokens for IdentityServer access token ?
 * Request authentication using the provider's native libary.
 * Exchange external token with IdentityServer token by making following request to IdentityServer.
 
@@ -18,7 +18,7 @@ POST connect/token
 
 You can change ```provider``` to ```Facebook``` , ```Google``` and ```Twitter``` and provide respective token in the ```external_token``` parameter.
 
-#### How to setup an external provider
+## How to setup an external provider
 
 1. ##### Derive an interface from ```IExternalAuthProvider```
 
