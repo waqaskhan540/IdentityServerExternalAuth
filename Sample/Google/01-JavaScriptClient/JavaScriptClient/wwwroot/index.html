@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="google-signin-client_id" content="868941324139-atm2t6ubkjq5ic5u7g7e0fn6e10c6d26.apps.googleusercontent.com">
+    <title>JavaScript Client</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script>
+        var user;
+        var idsrv_accessToken;
+
+        function onSignIn(googleUser) {
+            //profile = googleUser.getBasicProfile();
+            //console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            //console.log('Name: ' + profile.getName());
+            //console.log('Image URL: ' + profile.getImageUrl());
+            //console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+             user = googleUser;
+
+            
+        }
+
+        function getIdentityServerToken() {
+            var googleAccessToken = user.Zi.access_token;
+            var profile = user.getBasicProfile();
+            var client_url = "http://localhost:4420/ExternalAuth/Login";
+
+            var request = {
+                Email: profile.getEmail(),
+                AccessToken: googleAccessToken,
+                Provider: "Google"
+            };
+
+            $.post(client_url, request, function (result) {
+                debugger;
+                if (result.error) {
+                    //need to show form
+                } else if (result.access_token) {
+                    idsrv_accessToken = result.access_token;
+                }
+            })
+
+        }
+
+        function makeApiRequest() {
+
+            var apiUrl = "http://localhost:4343/Values/Get";
+           
+
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + idsrv_accessToken
+                },
+                success: function (result) {
+                    
+                    $('#results').text(JSON.stringify(result))
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div> <br/>
+    <div> <button onclick="getIdentityServerToken()">Get IdentityServer Token</button></div>
+    <div> <button onclick="makeApiRequest()">Make API Request</button></div>
+    <div id="results"></div>
+</body>
+</html>

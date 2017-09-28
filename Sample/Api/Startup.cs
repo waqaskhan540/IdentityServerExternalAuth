@@ -27,7 +27,17 @@ namespace Api
                o.Audience = "Test.WebApi";
                o.RequireHttpsMetadata = false;
            });
-                
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Cors", builder =>
+                 {
+                     builder.AllowAnyHeader();
+                     builder.AllowAnyMethod();
+                     builder.AllowAnyOrigin();
+                 });
+            });
+
             services.AddMvc();
         }
 
@@ -39,6 +49,7 @@ namespace Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("Cors");
             app.UseAuthentication();
             app.UseMvc();
         }

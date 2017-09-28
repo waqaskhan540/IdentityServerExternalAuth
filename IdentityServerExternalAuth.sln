@@ -5,11 +5,17 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerExternalAuth", "IdentityServerExternalAuth\IdentityServerExternalAuth.csproj", "{915C519B-8BA0-47CC-924B-33A7C509B605}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Sample\Api\Api.csproj", "{8484BC00-3DDF-4CB4-9D4B-66762FB530B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Sample\Api\Api.csproj", "{8484BC00-3DDF-4CB4-9D4B-66762FB530B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{A9B88D8B-A516-45F1-9603-59A0C97C1B14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Sample\Client\Client\Client.csproj", "{9676C3D3-2B66-41BD-BEA0-C3511C17C3D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Sample\Client\Client\Client.csproj", "{9676C3D3-2B66-41BD-BEA0-C3511C17C3D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Google", "Google", "{BA4D1A85-656B-4680-BCF5-37E036CFCCA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-JavaScriptClient", "01-JavaScriptClient", "{405084AA-F076-4A3C-B6AF-B484CAC3BCFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptClient", "Sample\Google\01-JavaScriptClient\JavaScriptClient\JavaScriptClient.csproj", "{A3E80249-1A15-4F6D-984A-E85A53187448}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +35,10 @@ Global
 		{9676C3D3-2B66-41BD-BEA0-C3511C17C3D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9676C3D3-2B66-41BD-BEA0-C3511C17C3D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9676C3D3-2B66-41BD-BEA0-C3511C17C3D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E80249-1A15-4F6D-984A-E85A53187448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E80249-1A15-4F6D-984A-E85A53187448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E80249-1A15-4F6D-984A-E85A53187448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E80249-1A15-4F6D-984A-E85A53187448}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +46,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8484BC00-3DDF-4CB4-9D4B-66762FB530B4} = {A9B88D8B-A516-45F1-9603-59A0C97C1B14}
 		{9676C3D3-2B66-41BD-BEA0-C3511C17C3D8} = {A9B88D8B-A516-45F1-9603-59A0C97C1B14}
+		{BA4D1A85-656B-4680-BCF5-37E036CFCCA6} = {A9B88D8B-A516-45F1-9603-59A0C97C1B14}
+		{405084AA-F076-4A3C-B6AF-B484CAC3BCFF} = {BA4D1A85-656B-4680-BCF5-37E036CFCCA6}
+		{A3E80249-1A15-4F6D-984A-E85A53187448} = {405084AA-F076-4A3C-B6AF-B484CAC3BCFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD254A9B-5467-497F-B5B3-C35D032239B5}

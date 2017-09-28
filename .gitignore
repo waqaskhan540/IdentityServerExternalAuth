@@ -92,3 +92,6 @@ $RECYCLE.BIN/
 .vs/config/applicationhost.config
 *.suo
 .vs/IdentityServerExternalAuth/v15/sqlite3/storage.ide
+*.targets
+*.props
+Sample/Google/01-JavaScriptClient/JavaScriptClient/obj/project.assets.json

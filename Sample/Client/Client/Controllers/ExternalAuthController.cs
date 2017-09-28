@@ -69,7 +69,7 @@ namespace Client.Controllers
 
                 if (!string.IsNullOrWhiteSpace(result.AccessToken))
                 {
-                    return await ApiRequest(result.AccessToken);
+                    return new JsonResult(new { access_token = result.AccessToken });
                 }
                
 
