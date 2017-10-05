@@ -56,6 +56,7 @@ namespace IdentityServerExternalAuth.Configuration
                     AccessTokenType = AccessTokenType.Jwt,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AccessTokenLifetime = 86400,
+                    AllowOfflineAccess = true,
                     IdentityTokenLifetime = 86400,
                     AlwaysSendClientClaims = true,
                     Enabled = true,
