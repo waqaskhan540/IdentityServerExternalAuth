@@ -94,7 +94,20 @@ namespace IdentityServerExternalAuth.ExtensionGrant
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidRequest, "couldn't retrieve user info from specified provider, please make sure that access token is not expired.");
                 return;
             }
-          
+
+            var externalId = userInfo.Value<string>("id");
+            if (!string.IsNullOrWhiteSpace(externalId))
+            {
+                var externalUser = _externalUserRepository.Get().FirstOrDefault(x => x.ExternalId == externalId);
+                if(null != externalUser)
+                {
+                    var user = _userManager.FindByIdAsync(externalUser.UserId).Result;
+                    var userClaims = _userManager.GetClaimsAsync(user).Result;
+                    context.Result = new GrantValidationResult(user.Id, provider, userClaims, provider, null);
+                    return;
+                }
+            }
+
             if (string.IsNullOrWhiteSpace(request_email))
             {
                 context.Result = _nonEmailUserProcessor.Process(userInfo, provider);
