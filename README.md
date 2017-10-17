@@ -1,5 +1,13 @@
 # Exchanging external Tokens (Google, Twitter, Facebook,LinkedIn) with IdentityServer access tokens using an extension grant
 
+## Supported providers
+
+ - [x] Facebook
+ - [x] LinkedIn
+ - [x] Twitter
+ - [x] Google
+ - [ ] GitHub 
+ 
 ## How to exchange external tokens for IdentityServer access token ?
 * Request authentication using the provider's native library.
 * Exchange external token with IdentityServer token by making following request to IdentityServer.
