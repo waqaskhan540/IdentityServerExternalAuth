@@ -8,21 +8,22 @@ using Newtonsoft.Json.Linq;
 using IdentityServerExternalAuth.Repositories.Interfaces;
 using System.Net.Http;
 using IdentityServerExternalAuth.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServerExternalAuth.Providers
 {
-    public class LinkedInAuthProvider : ILinkedInAuthProvider
+    public class LinkedInAuthProvider<TUser> : ILinkedInAuthProvider where TUser : IdentityUser, new()
     {
-        private readonly IExternalUserRepository _externalUserRepository;
+      
         private readonly IProviderRepository _providerRepository;
         private readonly HttpClient _httpClient;
         public LinkedInAuthProvider(
-             IExternalUserRepository externalUserRepository,
+         
              IProviderRepository providerRepository,
              HttpClient httpClient
              )
         {
-            _externalUserRepository = externalUserRepository;
+       
             _providerRepository = providerRepository;
             _httpClient = httpClient;
         }

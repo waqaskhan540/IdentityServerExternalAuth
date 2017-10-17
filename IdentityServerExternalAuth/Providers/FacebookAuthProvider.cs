@@ -8,21 +8,20 @@ using IdentityServerExternalAuth.Repositories.Interfaces;
 using IdentityServerExternalAuth.Entities;
 using IdentityServerExternalAuth.Helpers;
 using System.Net.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServerExternalAuth.Providers
 {
-    public class FacebookAuthProvider : IFacebookAuthProvider
+    public class FacebookAuthProvider<TUser> : IFacebookAuthProvider where TUser:IdentityUser , new()
     {
-        private readonly IExternalUserRepository _externalUserRepository;
+ 
         private readonly IProviderRepository _providerRepository;
         private readonly HttpClient _httpClient;
-        public FacebookAuthProvider(
-            IExternalUserRepository externalUserRepository,
+        public FacebookAuthProvider(         
             IProviderRepository providerRepository,
             HttpClient httpClient
             )
-        {
-            _externalUserRepository = externalUserRepository;
+        {        
             _providerRepository = providerRepository;
             _httpClient = httpClient;
         }

@@ -35,6 +35,12 @@ namespace IdentityServerExternalAuth.Helpers
                      ProviderId = 4,
                      Name="LinkedIn",
                      UserInfoEndPoint = "https://api.linkedin.com/v1/people/~:(id,email-address,first-name,last-name,location,industry,picture-url)?"
+                 },
+                 new Provider
+                 {
+                     ProviderId = 5,
+                     Name = "GitHub",
+                     UserInfoEndPoint = "https://api.github.com/user"
                  }
             };
         }

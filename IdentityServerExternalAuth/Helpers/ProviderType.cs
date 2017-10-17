@@ -10,6 +10,7 @@ namespace IdentityServerExternalAuth.Helpers
         Facebook,
         Twitter,
         Google,
-        LinkedIn
+        LinkedIn,
+        GitHub
     }
 }

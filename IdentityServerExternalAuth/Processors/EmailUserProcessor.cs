@@ -12,19 +12,16 @@ using IdentityServer4.Models;
 
 namespace IdentityServerExternalAuth.Processors
 {
-    public class EmailUserProcessor : IEmailUserProcessor
-    {
-        private readonly IExternalUserRepository _externalUserRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public EmailUserProcessor(
-            IExternalUserRepository externalUserRepository,
-            UserManager<ApplicationUser> userManager
+    public class EmailUserProcessor<TUser> : IEmailUserProcessor where TUser: IdentityUser,new()
+    {        
+        private readonly UserManager<TUser> _userManager;
+        public EmailUserProcessor(            
+            UserManager<TUser> userManager
             )
         {
-            _externalUserRepository = externalUserRepository ?? throw new ArgumentNullException(nameof(externalUserRepository));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
-        public GrantValidationResult Process(JObject userInfo,string email,string provider)
+        public async Task<GrantValidationResult> ProcessAsync(JObject userInfo,string email,string provider)
         {
             var userEmail = email;
             var userExternalId = userInfo.Value<string>("id");
@@ -43,13 +40,13 @@ namespace IdentityServerExternalAuth.Processors
 
             }
 
-            var new_user = new ApplicationUser { Email = userEmail ,UserName = userEmail};
-            var result =  _userManager.CreateAsync(new_user).Result;
+            var newUser = new TUser { Email = userEmail ,UserName = userEmail};
+            var result =  _userManager.CreateAsync(newUser).Result;
             if (result.Succeeded)
-            {
-                _externalUserRepository.Add(new ExternalUser { ExternalId = userExternalId, Provider = provider, UserId = new_user.Id });
-                var userClaims = _userManager.GetClaimsAsync(new_user).Result;
-                return new GrantValidationResult(new_user.Id, provider, userClaims, provider, null);
+            {                
+                await _userManager.AddLoginAsync(newUser, new UserLoginInfo(provider, userExternalId, provider));
+                var userClaims = _userManager.GetClaimsAsync(newUser).Result;
+                return new GrantValidationResult(newUser.Id, provider, userClaims, provider, null);
             }
             return new GrantValidationResult(TokenRequestErrors.InvalidRequest, "could not create user , please try again.");
         }

@@ -1,0 +1,14 @@
+﻿@using IdentityServerExternalAuth.Entities
+<div>
+    <h4>IdentityServer4 with External Authentication Providers Running...</h4>
+    
+    <strong> Supported providers</strong>
+    <ol>
+        
+        @foreach(var provider in ViewBag.Providers as IEnumerable<Provider>)
+        {
+
+            <li>@provider.Name</li>
+        }
+    </ol>
+</div>

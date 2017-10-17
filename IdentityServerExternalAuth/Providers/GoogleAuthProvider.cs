@@ -8,21 +8,22 @@ using Newtonsoft.Json.Linq;
 using IdentityServerExternalAuth.Repositories.Interfaces;
 using System.Net.Http;
 using IdentityServerExternalAuth.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServerExternalAuth.Providers
 {
-    public class GoogleAuthProvider : IGoogleAuthProvider
+    public class GoogleAuthProvider<TUser> : IGoogleAuthProvider where TUser:IdentityUser,new()
     {
-        private readonly IExternalUserRepository _externalUserRepository;
+        
         private readonly IProviderRepository _providerRepository;
         private readonly HttpClient _httpClient;
         public GoogleAuthProvider(
-             IExternalUserRepository externalUserRepository,
+             
              IProviderRepository providerRepository,
              HttpClient httpClient
              )
         {
-            _externalUserRepository = externalUserRepository;
+            
             _providerRepository = providerRepository;
             _httpClient = httpClient;
         }

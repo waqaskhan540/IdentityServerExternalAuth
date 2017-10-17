@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IdentityServerExternalAuth.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,16 @@ namespace IdentityServerExternalAuth.Controllers
 {
     public class HomeController:Controller
     {
-        public  string Index()
+        private readonly IProviderRepository _providersRepository;
+
+        public HomeController(IProviderRepository providersRepository)
         {
-            return "IdentityServer4 Running...!!!";
+            _providersRepository = providersRepository ?? throw new ArgumentNullException(nameof(providersRepository));
+        }
+        public  IActionResult Index()
+        {
+            ViewBag.Providers = _providersRepository.Get();
+            return View();
         }
     }
 }

@@ -12,19 +12,19 @@ using IdentityServer4.Models;
 
 namespace IdentityServerExternalAuth.Processors
 {
-    public class NonEmailUserProcessor : INonEmailUserProcessor
+    public class NonEmailUserProcessor<TUser> : INonEmailUserProcessor where TUser : IdentityUser , new()
     {
-        private readonly IExternalUserRepository _externalUserRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
+       // private readonly IExternalUserRepository _externalUserRepository;
+        private readonly UserManager<TUser> _userManager;
         public NonEmailUserProcessor(
-            IExternalUserRepository externalUserRepository,
-            UserManager<ApplicationUser> userManager
+         //   IExternalUserRepository externalUserRepository,
+            UserManager<TUser> userManager
             )
         {
-            _externalUserRepository = externalUserRepository ?? throw new ArgumentNullException(nameof(externalUserRepository));
+          //  _externalUserRepository = externalUserRepository ?? throw new ArgumentNullException(nameof(externalUserRepository));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
-        public GrantValidationResult Process(JObject userInfo,string provider)
+        public async Task<GrantValidationResult> ProcessAsync(JObject userInfo,string provider)
         {
 
             var userEmail = userInfo.Value<string>("email");
@@ -36,33 +36,31 @@ namespace IdentityServerExternalAuth.Processors
 
             if (userEmail == null)
             {
-                var registeredUser = _externalUserRepository.Get().FirstOrDefault(x => x.ExternalId == userExternalId);
-                if (registeredUser == null)
+                var existingUser = await _userManager.FindByLoginAsync(provider, userExternalId);
+                if (existingUser == null)
                 {
                     var customResponse = new Dictionary<string, object>();
                     customResponse.Add("userInfo", userInfo);
-
-                    
-                    return new GrantValidationResult(TokenRequestErrors.InvalidRequest, "could not retrieve user's email from the given provider, include email paramater and send request again.", customResponse);
+                     return new GrantValidationResult(TokenRequestErrors.InvalidRequest, "could not retrieve user's email from the given provider, include email paramater and send request again.", customResponse);
                     
                 }
                 else
                 {
-                    var existingUser =  _userManager.FindByIdAsync(registeredUser.UserId).Result;
-                    var userClaims = _userManager.GetClaimsAsync(existingUser).Result;
+                     existingUser = await _userManager.FindByIdAsync(existingUser.Id);
+                    var userClaims = await _userManager.GetClaimsAsync(existingUser);
                     return new GrantValidationResult(existingUser.Id, provider, userClaims, provider, null);
                 }
 
             }
             else
             {
-                var new_user = new ApplicationUser { Email = userEmail,UserName = userEmail };
-                var result =  _userManager.CreateAsync(new_user).Result;
+                var newUser = new TUser { Email = userEmail,UserName = userEmail };
+                var result = await _userManager.CreateAsync(newUser);
                 if (result.Succeeded)
-                {
-                    _externalUserRepository.Add(new ExternalUser { ExternalId = userExternalId, Provider = provider, UserId = new_user.Id });
-                    var userClaims = _userManager.GetClaimsAsync(new_user).Result;
-                    return new GrantValidationResult(new_user.Id, provider, userClaims, provider, null);
+                {                   
+                    await _userManager.AddLoginAsync(newUser, new UserLoginInfo(provider, userExternalId, provider));
+                    var userClaims = await _userManager.GetClaimsAsync(newUser);
+                    return new GrantValidationResult(newUser.Id, provider, userClaims, provider, null);
                 }
                 return new GrantValidationResult(TokenRequestErrors.InvalidRequest, "user could not be created, please try again");
             }

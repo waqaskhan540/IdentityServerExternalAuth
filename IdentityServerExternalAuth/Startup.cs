@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using IdentityServerExternalAuth.Extensions;
+using System;
+using IdentityServerExternalAuth.Entities;
 
 namespace IdentityServerExternalAuth
 {
@@ -20,12 +22,14 @@ namespace IdentityServerExternalAuth
 
             services.AddDatabaseConfiguration(Configuration.GetConnectionString("DefaultConnection"))
                     .AddIdentityServerConfig()
-                    .AddServices()
+                    .AddServices<ApplicationUser>()
                     .AddRepositories()
-                    .AddProviders();
+                    .AddProviders<ApplicationUser>();
 
             services.AddMvc();
         }
+
+
 
         public IConfiguration Configuration;
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

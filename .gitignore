@@ -95,3 +95,6 @@ $RECYCLE.BIN/
 *.targets
 *.props
 Sample/Google/01-JavaScriptClient/JavaScriptClient/obj/project.assets.json
+Sample/Client/Client/obj/project.assets.json
+*.pdb
+IdentityServerExternalAuth/obj/Debug/netcoreapp2.0/IdentityServerExternalAuth.dll

@@ -17,6 +17,6 @@ namespace IdentityServerExternalAuth.Data
 
         }
 
-        public DbSet<ExternalUser> ExternalUsers { get; set; }
+       
     }
 }

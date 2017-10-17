@@ -9,21 +9,19 @@ using IdentityServerExternalAuth.Repositories.Interfaces;
 using System.Net.Http;
 using IdentityServerExternalAuth.Helpers;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServerExternalAuth.Providers
 {
-    public class TwitterAuthProvider : ITwitterAuthProvider
-    {
-        private readonly IExternalUserRepository _externalUserRepository;
+    public class TwitterAuthProvider<TUser> : ITwitterAuthProvider where TUser:IdentityUser,new()
+    {        
         private readonly IProviderRepository _providerRepository;
         private readonly HttpClient _httpClient;
-        public TwitterAuthProvider(
-             IExternalUserRepository externalUserRepository,
+        public TwitterAuthProvider(             
              IProviderRepository providerRepository,
              HttpClient httpClient
              )
-        {
-            _externalUserRepository = externalUserRepository;
+        {            
             _providerRepository = providerRepository;
             _httpClient = httpClient;
         }

@@ -9,6 +9,6 @@ namespace IdentityServerExternalAuth.Interfaces.Processors
 {
     public interface IEmailUserProcessor
     {
-        GrantValidationResult Process(JObject userInfo,string email, string provider);
+        Task<GrantValidationResult> ProcessAsync(JObject userInfo,string email, string provider);
     }
 }

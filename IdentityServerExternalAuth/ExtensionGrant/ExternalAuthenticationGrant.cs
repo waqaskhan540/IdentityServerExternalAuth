@@ -13,48 +13,50 @@ using System.Threading.Tasks;
 
 namespace IdentityServerExternalAuth.ExtensionGrant
 {
-    public class ExternalAuthenticationGrant : IExtensionGrantValidator
+    public class ExternalAuthenticationGrant<TUser> : IExtensionGrantValidator where TUser : IdentityUser, new()
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IExternalUserRepository _externalUserRepository;
+        private readonly UserManager<TUser> _userManager;      
         private readonly IProviderRepository _providerRepository;
         private readonly IFacebookAuthProvider _facebookAuthProvider;
         private readonly IGoogleAuthProvider _googleAuthProvider;
         private readonly ITwitterAuthProvider _twitterAuthProvider;
         private readonly ILinkedInAuthProvider _linkedAuthProvider;
+        private readonly IGitHubAuthProvider _githubAuthProvider;
         private readonly INonEmailUserProcessor _nonEmailUserProcessor;
         private readonly IEmailUserProcessor _emailUserProcessor;
         public ExternalAuthenticationGrant(
-            UserManager<ApplicationUser> userManager,
-            IExternalUserRepository externalUserRepository,
+            UserManager<TUser> userManager,            
             IProviderRepository providerRepository,
             IFacebookAuthProvider facebookAuthProvider,
             IGoogleAuthProvider googleAuthProvider,
             ITwitterAuthProvider twitterAuthProvider,
             ILinkedInAuthProvider linkeInAuthProvider,
+            IGitHubAuthProvider githubAuthProvider,
             INonEmailUserProcessor nonEmailUserProcessor,
             IEmailUserProcessor emailUserProcessor            
             )
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _externalUserRepository = externalUserRepository ?? throw new ArgumentNullException(nameof(externalUserRepository));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));            
             _providerRepository = providerRepository?? throw new ArgumentNullException(nameof(providerRepository));
             _facebookAuthProvider = facebookAuthProvider ?? throw new ArgumentNullException(nameof(facebookAuthProvider));
             _googleAuthProvider = googleAuthProvider ?? throw new ArgumentNullException(nameof(googleAuthProvider));
             _twitterAuthProvider = twitterAuthProvider ?? throw new ArgumentNullException(nameof(twitterAuthProvider));
             _linkedAuthProvider = linkeInAuthProvider ?? throw new ArgumentNullException(nameof(linkeInAuthProvider));
+            _githubAuthProvider = githubAuthProvider ?? throw new ArgumentNullException(nameof(githubAuthProvider));
             _nonEmailUserProcessor = nonEmailUserProcessor ?? throw new ArgumentNullException(nameof(nonEmailUserProcessor));
             _emailUserProcessor = emailUserProcessor ?? throw new ArgumentNullException(nameof(nonEmailUserProcessor));
 
-            providers = new Dictionary<ProviderType, IExternalAuthProvider>();
-            providers.Add(ProviderType.Facebook, _facebookAuthProvider);
-            providers.Add(ProviderType.Google, _googleAuthProvider);
-            providers.Add(ProviderType.Twitter, _twitterAuthProvider);
-            providers.Add(ProviderType.LinkedIn, _linkedAuthProvider);
+            _providers = new Dictionary<ProviderType, IExternalAuthProvider>
+            {
+                 {ProviderType.Facebook, _facebookAuthProvider},
+                 {ProviderType.Google, _googleAuthProvider},
+                 {ProviderType.Twitter, _twitterAuthProvider},
+                 {ProviderType.LinkedIn, _linkedAuthProvider}
+            };
         }
 
 
-        private Dictionary<ProviderType, IExternalAuthProvider> providers;
+        private Dictionary<ProviderType, IExternalAuthProvider> _providers;
         
         public string GrantType => "external";
        
@@ -77,9 +79,9 @@ namespace IdentityServerExternalAuth.ExtensionGrant
                 return;
             }
 
-            var request_email = context.Request.Raw.Get("email"); 
+            var requestEmail = context.Request.Raw.Get("email"); 
 
-            ProviderType providerType=(ProviderType)Enum.Parse(typeof(ProviderType), provider,true);
+            var providerType=(ProviderType)Enum.Parse(typeof(ProviderType), provider,true);
 
             if (!Enum.IsDefined(typeof(ProviderType), providerType))
             {
@@ -87,7 +89,7 @@ namespace IdentityServerExternalAuth.ExtensionGrant
                 return;
             }
 
-            var userInfo = providers[providerType].GetUserInfo(token);
+            var userInfo = _providers[providerType].GetUserInfo(token);
 
             if(userInfo == null)
             {
@@ -98,23 +100,24 @@ namespace IdentityServerExternalAuth.ExtensionGrant
             var externalId = userInfo.Value<string>("id");
             if (!string.IsNullOrWhiteSpace(externalId))
             {
-                var externalUser = _externalUserRepository.Get().FirstOrDefault(x => x.ExternalId == externalId);
-                if(null != externalUser)
+               
+                var user = await _userManager.FindByLoginAsync(provider, externalId);
+                if(null != user)
                 {
-                    var user = _userManager.FindByIdAsync(externalUser.UserId).Result;
-                    var userClaims = _userManager.GetClaimsAsync(user).Result;
+                    user = await _userManager.FindByIdAsync(user.Id);
+                    var userClaims = await _userManager.GetClaimsAsync(user);
                     context.Result = new GrantValidationResult(user.Id, provider, userClaims, provider, null);
                     return;
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(request_email))
+            if (string.IsNullOrWhiteSpace(requestEmail))
             {
-                context.Result = _nonEmailUserProcessor.Process(userInfo, provider);
+                context.Result = await _nonEmailUserProcessor.ProcessAsync(userInfo, provider);
                 return;
             }
 
-            context.Result = _emailUserProcessor.Process(userInfo, request_email, provider);
+            context.Result = await _emailUserProcessor.ProcessAsync(userInfo, requestEmail, provider);
             return;
         }
     }

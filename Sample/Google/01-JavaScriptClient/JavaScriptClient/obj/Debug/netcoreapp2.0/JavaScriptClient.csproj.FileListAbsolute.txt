@@ -1,0 +1,11 @@
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\bin\Debug\netcoreapp2.0\JavaScriptClient.deps.json
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\bin\Debug\netcoreapp2.0\JavaScriptClient.runtimeconfig.json
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\bin\Debug\netcoreapp2.0\JavaScriptClient.runtimeconfig.dev.json
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\bin\Debug\netcoreapp2.0\JavaScriptClient.dll
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\bin\Debug\netcoreapp2.0\JavaScriptClient.pdb
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\obj\Debug\netcoreapp2.0\JavaScriptClient.csprojResolveAssemblyReference.cache
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\obj\Debug\netcoreapp2.0\JavaScriptClient.csproj.CoreCompileInputs.cache
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\obj\Debug\netcoreapp2.0\JavaScriptClient.AssemblyInfoInputs.cache
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\obj\Debug\netcoreapp2.0\JavaScriptClient.AssemblyInfo.cs
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\obj\Debug\netcoreapp2.0\JavaScriptClient.dll
+D:\GitHub\IdentityServerExternal\IdentityServerExternalAuth\Sample\Google\01-JavaScriptClient\JavaScriptClient\obj\Debug\netcoreapp2.0\JavaScriptClient.pdb
