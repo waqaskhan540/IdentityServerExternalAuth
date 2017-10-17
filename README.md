@@ -14,7 +14,7 @@ POST connect/token
      provider = facebook 
      external_token  = [facebook_access_token]
 ```
- * If user is already registered then IdentityServer will return the access token, otherwise it will send the user's data and prompt for an email parameter to be added, In this case make another request with an extra ```email``` parameter.
+ * If user is already registered then IdentityServer will return the access token, otherwise it will send the user's data and prompt for an email parameter to be added, in this case make another request with an extra ```email``` parameter.
  
  ```
 POST connect/token
