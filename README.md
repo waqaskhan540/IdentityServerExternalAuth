@@ -44,7 +44,7 @@ You can change ```provider``` to ```Facebook``` , ```Google``` , ```Twitter``` a
 
 ```csharp
 
-public interface IMyCustomProvider : IExternalProvider {
+public interface IMyCustomProvider : IExternalAuthProvider {
     Provider provider {get;}
 }
 ```
